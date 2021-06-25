@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+BASEDIR=$(dirname $0)
+
+if [[ "$1" == "" ]]
+then
+    echo "Укажите команду"
+    exit 1
+fi
+
+if [[ "$1" == "exec" ]]
+then
+    sudo docker exec -it picfind-app-laravel sh -c "$2"
+    exit 0
+fi
+
+if [[ "$1" == "exec-dev" ]]
+then
+    sudo docker exec -it picfind_dev_php sh -c "$2"
+    exit 0
+fi
+
+if [[ "$1" == "execbg" ]]
+then
+    sudo docker exec picfind-app-laravel sh -c "$2"
+    exit 0
+fi
+
+if [[ "$1" == "dev" ]]
+then
+    sudo docker-compose -p picfind-laravel -f $BASEDIR/docker-compose-dev.yml up -d  --force-recreate  $2
+    exit 0
+fi
+
+if [[ "$1" == "stop" ]]
+then
+    sudo docker-compose -p picfind-laravel -f $BASEDIR/docker-compose-dev.yml stop
+    exit 0
+fi
+
+
+if [[ "$1" == "build" ]]
+then
+    sudo docker-compose -p picfind-laravel -f $BASEDIR/docker-compose-dev.yml build
+    exit 0
+fi
+
+echo "Неверно указана команда"
+exit 1
